@@ -6,11 +6,11 @@ Generate type definition files for CSS modules to make using TypeScript, CSS Mod
 
 ### Available commands
 
-`gct init` Configures the project.  Must be run before other scripts.
+`gct-init` Configures the project.  Must be run before other scripts.
 
-`gct run` Generates type definition files for CSS modules within the project.
+`gct-run` Generates type definition files for CSS modules within the project.
 
-`gct remove` Removes all generated type definition files.
+`gct-remove` Removes all generated type definition files.
 
 ### Initialization configuration options
 

@@ -4,9 +4,9 @@
   "description": "Generate type definition files for CSS modules in Gatsby",
   "main": "build/src/main.js",
   "bin": {
-    "gct run": "./build/src/main.js",
-    "gct init": "./build/src/main.js",
-    "gct remove": "./build/src/remove.js"
+    "gct-init": "./build/src/init.js",
+    "gct-run": "./build/src/main.js",
+    "gct-remove": "./build/src/remove.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

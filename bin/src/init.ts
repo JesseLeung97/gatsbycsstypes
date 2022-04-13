@@ -19,11 +19,11 @@ type TInputDefaults = {
 
 async function initializeToDefaults() {
     const appRoot = path.resolve();
-    //const fileGenerationRoot = path.resolve(appRoot, "src");
+    const fileGenerationRoot = path.resolve(appRoot, "src");
 
     let appConfig: TConfigStructure = {
         IS_INITIALIZED: false,
-        APP_ROOT: appRoot,
+        APP_ROOT: fileGenerationRoot,
         IGNORED_FOLDERS: [
             "node_modules",
             "build",

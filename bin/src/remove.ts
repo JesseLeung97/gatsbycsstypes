@@ -35,7 +35,6 @@ async function confirmRemove() {
 }
 
 async function removeAllGeneratedFiles() {
-    console.log(generatedFiles);
     const generatedFilePaths = Object.values(generatedFiles);
     for await (const filePath of generatedFilePaths) {
         fs.unlink(filePath, (err) => {
