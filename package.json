@@ -1,0 +1,23 @@
+{
+  "name": "gatsbycsstypes",
+  "version": "1.0.0",
+  "description": "Generate type definition files for CSS modules in Gatsby",
+  "main": "build/src/main.js",
+  "bin": {
+    "gct run": "./build/src/main.js",
+    "gct init": "./build/src/main.js",
+    "gct remove": "./build/src/remove.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx tsc"
+  },
+  "author": "Jesse Leung",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^4.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23"
+  }
+}
