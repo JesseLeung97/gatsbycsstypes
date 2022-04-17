@@ -1,6 +1,6 @@
 {
   "name": "gatsbycsstypes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate type definition files for CSS modules in Gatsby",
   "main": "build/src/main.js",
   "bin": {
@@ -9,7 +9,7 @@
     "gct-remove": "./build/src/remove.js"
   },
   "files": [
-    "./build/**/*"
+    "/build/**/*"
   ],
   "types": "./build/types/src/index.d.ts",
   "scripts": {
