@@ -9,9 +9,8 @@
     "strict": true,                            
     "skipLibCheck": true,
     "watch": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "declarationDir": "./build/types"                           
+    "declaration": true, 
+    "declarationDir": "./build/types"                     
   },
   "exclude": [
     "./bin/gctconfig.ts",
