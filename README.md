@@ -4,6 +4,22 @@ Generate type definition files for CSS modules to make using TypeScript, CSS Mod
 
 ### Using this script
 
+`npm install gatsbycsstypes` To install latest version of gatsbycss types.
+
+`npx gct-init` To configure the project before first run.
+
+`npx gct-run` To generate `.d.ts` files for CSS modules.
+
+### Continuous type generation
+
+By default, the script must be explicity run with `npx gct-run` to generate files.  To watch `.module.css` files and generate type defintion files after every change:
+
+1. Install nodemon using `npm install nodemon`
+
+2. Add `"start:css-types": "nodemon -e .module.css -x \"npx gct-run\"",` to the `scripts` section of your `package.json` file
+
+3. Add `& npm run start:css-types` to the end of the default `start` script that comes with Gatsby.
+
 ### Available commands
 
 `gct-init` Configures the project.  Must be run before other scripts.
