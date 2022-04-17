@@ -56,7 +56,6 @@ function confirmRemove() {
 function removeAllGeneratedFiles() {
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(gctrecord_1.default);
         const generatedFilePaths = Object.values(gctrecord_1.default);
         try {
             for (var generatedFilePaths_1 = __asyncValues(generatedFilePaths), generatedFilePaths_1_1; generatedFilePaths_1_1 = yield generatedFilePaths_1.next(), !generatedFilePaths_1_1.done;) {

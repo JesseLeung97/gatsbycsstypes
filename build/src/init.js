@@ -21,10 +21,10 @@ const util_1 = require("./util");
 function initializeToDefaults() {
     return __awaiter(this, void 0, void 0, function* () {
         const appRoot = path_1.default.resolve();
-        //const fileGenerationRoot = path.resolve(appRoot, "src");
+        const fileGenerationRoot = path_1.default.resolve(appRoot, "src");
         let appConfig = {
             IS_INITIALIZED: false,
-            APP_ROOT: appRoot,
+            APP_ROOT: fileGenerationRoot,
             IGNORED_FOLDERS: [
                 "node_modules",
                 "build",

@@ -8,6 +8,10 @@
     "gct-run": "./build/src/main.js",
     "gct-remove": "./build/src/remove.js"
   },
+  "files": [
+    "./build/**/*"
+  ],
+  "types": "./build/types/src/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx tsc"
