@@ -1,3 +1,5 @@
+import config from "../gctconfig";
+
 const logger = {
     appRootSet: function(projectRoot: string, configRoot: string) {
         console.log(successMessage(`App root set to: /${projectRoot}/${configRoot}`)); 
@@ -12,6 +14,9 @@ const logger = {
             });
             console.log(rejectInputMessage(`[ ${errorDirsOutput} ] could not be found.  Please check your entry for errors`));
         }
+    },
+    recursionDepthExceeded: function() {
+        console.log(rejectInputMessage(`Recursion depth, [${config.MAX_RECURSION_DEPTH}], exceeded.  Please update your config file or consider restructuring your project structure.`))
     },
     additionalIgnoredDirectoriesSet: function(directories: string[]) {
         let lineBuilder = "";
@@ -53,10 +58,10 @@ const logger = {
 
 const color = {
     red: function(input: string) {
-        return `\x1b[32m${input}\x1b[0m`;
-    },
-    green: function(input: string) {
         return `\x1b[31m${input}\x1b[0m`;
+    },
+    green:  function(input: string) {
+        return `\x1b[32m${input}\x1b[0m`;
     },
     fadedGrey: function(input: string) {
         return `\x1b[2m${input}\x1b[0m`;
@@ -64,11 +69,11 @@ const color = {
 }
 
 function successMessage(message: string) {
-    return color.red(message)
+    return color.green(message)
 }
 
 function rejectInputMessage(message: string) {
-    return color.green(message);
+    return color.red(message);
 }
 
 const tab = "    ";

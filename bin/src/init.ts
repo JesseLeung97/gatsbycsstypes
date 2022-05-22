@@ -1,14 +1,14 @@
 #! /usr/bin/env node
 //#region Import
 import path from "path";
-import fs, { appendFile } from "fs";
+import fs from "fs";
 import readline from "readline";
-import { logger, successMessage, rejectInputMessage, lineBuilder, promptWithPlaceholder } from "./util";
+import { logger, lineBuilder, promptWithPlaceholder } from "./util";
 //#endregion
 
 //#region Utility
-type TConfigPropertyKey = "IS_INITIALIZED" | "APP_ROOT" | "IGNORED_FOLDERS" | "TARGET_FILE_EXT" | "TARGET_REGEX" | "CHARACTERS_TO_REMOVE";
-type TConfigPropertyValue = boolean | string | string[];
+type TConfigPropertyKey = "IS_INITIALIZED" | "APP_ROOT" | "IGNORED_FOLDERS" | "TARGET_FILE_EXT" | "TARGET_REGEX" | "MAX_RECURSION_DEPTH";
+type TConfigPropertyValue = boolean | string | string[] | number;
 type TConfigStructure = {
     [key in TConfigPropertyKey]: TConfigPropertyValue
 }
@@ -30,11 +30,8 @@ async function initializeToDefaults() {
             "dist"
         ],
         TARGET_FILE_EXT: ".css",
-        TARGET_REGEX: `^[.]-?[_a-zA-Z]+[_a-zA-Z0-9-]*\s*\{`,
-        CHARACTERS_TO_REMOVE: [
-            "\.",
-            "\{"
-        ]
+        TARGET_REGEX: `-?[_a-zA-Z]+[_a-zA-Z0-9-]*\s*`,
+        MAX_RECURSION_DEPTH: 25
     }
 
     const inputDefaults = await requestDefaultProperties();
@@ -143,8 +140,7 @@ async function requestDefaultProperties() {
 }
 
 function writeToConfigFile(configObj: TConfigStructure) {
-    function addProperties(configObj: TConfigStructure)
-    {
+    function addProperties(configObj: TConfigStructure) {
         Object.keys(configObj).forEach((key) => {
             const value = configObj[key as keyof TConfigStructure];
             switch(typeof value) {

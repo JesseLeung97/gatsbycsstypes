@@ -4,18 +4,25 @@ import path from "path";
 import fs from "fs";
 import readline from "readline";
 import config from "../gctconfig";
-import { successMessage, lineBuilder, logger } from "./util";
+import { lineBuilder, logger } from "./util";
 //#endregion
 
 //#region Utility
 function getCssFiles(root: string) {
     let cssFilePaths: string[] = [];
-    
+    let currentDepth = 0;
+
     function checkDir(dirPath: string) {
+        if(currentDepth > config.MAX_RECURSION_DEPTH) {
+            logger.recursionDepthExceeded();
+            return;
+        }
+
         if(config.IGNORED_FOLDERS.indexOf(path.resolve(dirPath)) > -1) {
             return;
         }
 
+        currentDepth++;
         if(fs.statSync(path.resolve(dirPath)).isFile()) {
             if(path.extname(dirPath) === config.TARGET_FILE_EXT) {
                 cssFilePaths.push(dirPath);
@@ -45,29 +52,33 @@ async function buildDefinitionFiles(filePaths: string[]) {
         });
 
         for await (const line of rl) {
-            const className = getCssClassName(line);
-            if(className !== null) {
-                cssClassNames.push(className);
+            const cleanedClassNames = getCssClassName(line);
+            if(cleanedClassNames.length > 0) {
+                cssClassNames = [...cssClassNames, ...cleanedClassNames];
             }
         }
+
+        cssClassNames = [...new Set(cssClassNames)];
 
         writeCssDefineFile(cssClassNames, filePath);
     }
     
     function getCssClassName(line: string) {
-        const regex = RegExp(config.TARGET_REGEX);
+        let cleanedClassNames: string[] = [];
+
         line = line.replace(/\s/g, "");
 
-        if(regex.test(line)) {
-            config.CHARACTERS_TO_REMOVE.forEach(char => {
-                const charRegex = new RegExp(char);
-                line = line.replace(charRegex, "");
-            });
+        const fragments = line.split('.').filter(Boolean);
+        fragments.forEach((frag) => {
+            let regexMatches = frag.match(new RegExp(config.TARGET_REGEX));
+            if(regexMatches === null) {
+                return;
+            };
 
-           return line;
-        }
+            cleanedClassNames.push(...regexMatches);
+        });
 
-        return null;
+        return cleanedClassNames;
     }
 
     function writeCssDefineFile(classNames: string[], filePath: string) {

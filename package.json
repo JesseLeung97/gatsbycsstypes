@@ -1,7 +1,11 @@
 {
   "name": "gatsbycsstypes",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Generate type definition files for CSS modules in Gatsby",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JesseLeung97/gatsbycsstypes"
+  },
   "main": "build/src/main.js",
   "bin": {
     "gct-init": "./build/src/init.js",
@@ -17,7 +21,7 @@
     "start": "npx tsc"
   },
   "author": "Jesse Leung",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "typescript": "^4.6.3"
   },

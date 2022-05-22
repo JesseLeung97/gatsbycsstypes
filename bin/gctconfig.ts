@@ -9,9 +9,6 @@ const config = {
     ],
     TARGET_FILE_EXT: ".css",
     TARGET_REGEX: "^\\.[a-zA-Z0-9\\_\\-]*\{",
-    CHARACTERS_TO_REMOVE: [
-        "\.",
-        "\{"
-    ]
+    MAX_RECURSION_DEPTH: 25
 }
 export default config;
