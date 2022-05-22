@@ -6,6 +6,11 @@
     "type": "git",
     "url": "https://github.com/JesseLeung97/gatsbycsstypes"
   },
+  "keywords": [
+    "gatsby",
+    "css modules",
+    "typescript"
+  ],
   "main": "build/src/main.js",
   "bin": {
     "gct-init": "./build/src/init.js",
