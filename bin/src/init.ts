@@ -30,7 +30,7 @@ async function initializeToDefaults() {
             "dist"
         ],
         TARGET_FILE_EXT: ".css",
-        TARGET_REGEX: `-?[_a-zA-Z]+[_a-zA-Z0-9-]*\s*`,
+        TARGET_REGEX: `-?[_a-zA-Z]+[_a-zA-Z0-9-]*\s*\{`,
         MAX_RECURSION_DEPTH: 25
     }
 

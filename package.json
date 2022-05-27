@@ -1,6 +1,6 @@
 {
   "name": "gatsbycsstypes",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Generate type definition files for CSS modules in Gatsby",
   "repository": {
     "type": "git",

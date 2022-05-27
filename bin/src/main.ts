@@ -10,10 +10,10 @@ import { lineBuilder, logger } from "./util";
 //#region Utility
 function getCssFiles(root: string) {
     let cssFilePaths: string[] = [];
-    let currentDepth = 0;
+    const startDepth = 0;
 
-    function checkDir(dirPath: string) {
-        if(currentDepth > config.MAX_RECURSION_DEPTH) {
+    function checkDir(dirPath: string, currDepth: number) {
+        if(currDepth > config.MAX_RECURSION_DEPTH) {
             logger.recursionDepthExceeded();
             return;
         }
@@ -22,7 +22,6 @@ function getCssFiles(root: string) {
             return;
         }
 
-        currentDepth++;
         if(fs.statSync(path.resolve(dirPath)).isFile()) {
             if(path.extname(dirPath) === config.TARGET_FILE_EXT) {
                 cssFilePaths.push(dirPath);
@@ -31,11 +30,11 @@ function getCssFiles(root: string) {
         };
 
         fs.readdirSync(path.resolve(dirPath)).forEach(dir => {
-            checkDir(path.resolve(dirPath, dir));
+            checkDir(path.resolve(dirPath, dir), currDepth + 1);
         });
     }
 
-    checkDir(root);
+    checkDir(root, startDepth);
 
     return cssFilePaths;
 }
@@ -63,7 +62,12 @@ async function buildDefinitionFiles(filePaths: string[]) {
         writeCssDefineFile(cssClassNames, filePath);
     }
     
+    
     function getCssClassName(line: string) {
+        if(line.indexOf('.') < 0) {
+            return [];
+        }
+
         let cleanedClassNames: string[] = [];
 
         line = line.replace(/\s/g, "");
@@ -71,6 +75,13 @@ async function buildDefinitionFiles(filePaths: string[]) {
         const fragments = line.split('.').filter(Boolean);
         fragments.forEach((frag) => {
             let regexMatches = frag.match(new RegExp(config.TARGET_REGEX));
+            if(regexMatches === null) {
+                return;
+            };
+
+            regexMatches = regexMatches.map(elem => elem.replace('{', ""));
+            regexMatches = regexMatches.filter(elem => elem.indexOf('-') < 0);
+
             if(regexMatches === null) {
                 return;
             };
