@@ -21,6 +21,7 @@
 - Fix bug in class name parsing caused by CSS property values that contain the `.` character such as `opacity: 0.3;`
 - Update the default `TARGET_REGEX` to `-?[_a-zA-Z]+[_a-zA-Z0-9-]*\s*\{`
 - Prevent class names containing the `-` character from being parsed to comply with JavaScript property name conventions.
+- Fix bug which caused the recursion depth to be calculated incorrectly
 
 ## 1.1.0 May 2022
 #### Updates
