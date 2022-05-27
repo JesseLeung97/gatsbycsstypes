@@ -12,7 +12,7 @@
 - Write contributing and code-styles guide
 ### Features
 - Improve class name parsing for lines that include multiple class names.  For example, `.className1, .className2 {}` will currently be parsed as `className2: string`.
-- ~~ Decide how to support class names which include a `-` character ~~
+- ~~Decide how to support class names which include a `-` character~~
 - Add ability to watch and re-write individual files on change rather than batch-reprocessing the entire project
 - Add confirmation and ability to overwrite define files which are not project generated
 
