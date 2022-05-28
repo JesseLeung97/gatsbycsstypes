@@ -18,7 +18,12 @@
     "gct-remove": "./build/src/remove.js"
   },
   "files": [
-    "/build/**/*"
+    "/build/src/init.js",
+    "/build/src/main.js",
+    "/build/src/remove.js",
+    "/build/src/util.js",
+    "/build/gctconfig.js",
+    "/build/gctrecord.js"
   ],
   "types": "./build/types/src/index.d.ts",
   "scripts": {
