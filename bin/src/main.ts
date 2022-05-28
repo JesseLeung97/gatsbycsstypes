@@ -2,7 +2,7 @@
 //#region Import
 import path from "path";
 import fs from "fs";
-import readline from "readline";
+import readline, { ReadLine } from "readline";
 import config from "../gctconfig";
 import { lineBuilder, logger } from "./util";
 //#endregion
@@ -50,46 +50,48 @@ async function buildDefinitionFiles(filePaths: string[]) {
             crlfDelay: Infinity
         });
 
+        let fileContents = "";
         for await (const line of rl) {
-            const cleanedClassNames = getCssClassName(line);
-            if(cleanedClassNames.length > 0) {
-                cssClassNames = [...cssClassNames, ...cleanedClassNames];
-            }
+            fileContents += line;
         }
 
-        cssClassNames = [...new Set(cssClassNames)];
-
+        cssClassNames = [...parseCssClassNames(fileContents)];
         writeCssDefineFile(cssClassNames, filePath);
     }
-    
-    
-    function getCssClassName(line: string) {
-        if(line.indexOf('.') < 0) {
-            return [];
+
+    function parseCssClassNames(fileContents: string) {
+        const classContentRegExp = new RegExp(/\{(.*?)\}/g);
+        const mediaQueryRegExp = new RegExp(/@media[^{]+\{([\s\S]+?})\s*}/g);
+        const keyframesRegExp = new RegExp(/@keyframes[^{]+\{([\s\S]+?})\s*}/g);
+        const mediaQueryNameStartRegExp = new RegExp(/@media[^{]+\{/);
+
+        let mediaQueries = fileContents.match(mediaQueryRegExp);
+        fileContents = fileContents.replace(mediaQueryRegExp, "");
+
+        function parseMediaQueryClassNames(matches: RegExpMatchArray | null) {
+            if(matches === null) {
+                return "";
+            }
+            const initialClassNames = "";
+            const classNames = matches.reduce(
+                (previousValue, currentValue) => previousValue + currentValue.substring(0, currentValue.length -1).replace(mediaQueryNameStartRegExp, ""),
+                initialClassNames
+            );
+            return classNames;
         }
-
-        let cleanedClassNames: string[] = [];
-
-        line = line.replace(/\s/g, "");
-
-        const fragments = line.split('.').filter(Boolean);
-        fragments.forEach((frag) => {
-            let regexMatches = frag.match(new RegExp(config.TARGET_REGEX));
-            if(regexMatches === null) {
-                return;
-            };
-
-            regexMatches = regexMatches.map(elem => elem.replace('{', ""));
-            regexMatches = regexMatches.filter(elem => elem.indexOf('-') < 0);
-
-            if(regexMatches === null) {
-                return;
-            };
-
-            cleanedClassNames.push(...regexMatches);
-        });
-
-        return cleanedClassNames;
+        
+        const mediaClasses = parseMediaQueryClassNames(mediaQueries);
+        const classes = fileContents
+            .replace(mediaQueryRegExp, "")
+            .concat(mediaClasses)
+            .replace(keyframesRegExp, "")
+            .replace(classContentRegExp, "")
+            .split('.')
+            .filter(Boolean)
+            .filter(elem => elem.indexOf('-') < 0)
+            .map((elem) => elem.replace(/\s/g, "").replace(/\,/g, "").split(':')[0])
+            .filter(Boolean);
+        return new Set(classes);
     }
 
     function writeCssDefineFile(classNames: string[], filePath: string) {

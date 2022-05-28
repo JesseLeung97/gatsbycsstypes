@@ -7,7 +7,7 @@ import { logger, lineBuilder, promptWithPlaceholder } from "./util";
 //#endregion
 
 //#region Utility
-type TConfigPropertyKey = "IS_INITIALIZED" | "APP_ROOT" | "IGNORED_FOLDERS" | "TARGET_FILE_EXT" | "TARGET_REGEX" | "MAX_RECURSION_DEPTH";
+type TConfigPropertyKey = "IS_INITIALIZED" | "APP_ROOT" | "IGNORED_FOLDERS" | "TARGET_FILE_EXT" | "MAX_RECURSION_DEPTH";
 type TConfigPropertyValue = boolean | string | string[] | number;
 type TConfigStructure = {
     [key in TConfigPropertyKey]: TConfigPropertyValue
@@ -30,7 +30,6 @@ async function initializeToDefaults() {
             "dist"
         ],
         TARGET_FILE_EXT: ".css",
-        TARGET_REGEX: `-?[_a-zA-Z]+[_a-zA-Z0-9-]*\s*\{`,
         MAX_RECURSION_DEPTH: 25
     }
 
@@ -97,6 +96,7 @@ async function requestDefaultProperties() {
                 rl.question(promptWithPlaceholder({"Additional directories to ignore? ": false, "(Defaults: /node_modules, /build, /dist): ": true, "/": false}), inputIgnoredDirs => {
                     if(inputIgnoredDirs !== undefined && inputIgnoredDirs.length > 0) {
                         let dirs = inputIgnoredDirs.match(/\S+/g) || [];
+                        let dirPaths: string[] = [];
                         let errorDirs: string[] = [];
                         let isError = false;
 
@@ -105,6 +105,7 @@ async function requestDefaultProperties() {
                                 errorDirs.push(dir);
                                 isError = true;
                             }
+                            dirPaths.push(path.resolve(__appRoot, dir));
                         });
 
                         if(isError) {
@@ -112,7 +113,7 @@ async function requestDefaultProperties() {
                             return promptInput().then(_ => resolve());
                         }
 
-                        inputDefaults.ignoredDirs = dirs;
+                        inputDefaults.ignoredDirs = dirPaths;
                         logger.additionalIgnoredDirectoriesSet(dirs);
                         resolve();
                     } else {
@@ -131,7 +132,6 @@ async function requestDefaultProperties() {
         await appRootInput();
         await ignoredDirsInput();
         rl.close();
-        
     }
 
     await askQuestions();
