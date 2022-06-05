@@ -8,6 +8,7 @@ const config = {
         "dist"
     ],
     TARGET_FILE_EXT: ".css",
-    MAX_RECURSION_DEPTH: 25
+    MAX_RECURSION_DEPTH: 25,
+    UPDATE_INTERVAL: 1000
 }
 export default config;

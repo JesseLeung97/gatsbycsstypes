@@ -7,7 +7,7 @@ import { logger, lineBuilder, promptWithPlaceholder } from "./util";
 //#endregion
 
 //#region Utility
-type TConfigPropertyKey = "IS_INITIALIZED" | "APP_ROOT" | "IGNORED_FOLDERS" | "TARGET_FILE_EXT" | "MAX_RECURSION_DEPTH";
+type TConfigPropertyKey = "IS_INITIALIZED" | "APP_ROOT" | "IGNORED_FOLDERS" | "TARGET_FILE_EXT" | "MAX_RECURSION_DEPTH" | "UPDATE_INTERVAL";
 type TConfigPropertyValue = boolean | string | string[] | number;
 type TConfigStructure = {
     [key in TConfigPropertyKey]: TConfigPropertyValue
@@ -30,7 +30,8 @@ async function initializeToDefaults() {
             "dist"
         ],
         TARGET_FILE_EXT: ".css",
-        MAX_RECURSION_DEPTH: 25
+        MAX_RECURSION_DEPTH: 25,
+        UPDATE_INTERVAL: 3000
     }
 
     const inputDefaults = await requestDefaultProperties();

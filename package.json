@@ -15,11 +15,13 @@
   "bin": {
     "gct-init": "./build/src/init.js",
     "gct-run": "./build/src/main.js",
+    "gct-continuous": "./build/src/continuous.js",
     "gct-remove": "./build/src/remove.js"
   },
   "files": [
     "/build/src/init.js",
     "/build/src/main.js",
+    "build/src/continuous.js",
     "/build/src/remove.js",
     "/build/src/util.js",
     "/build/gctconfig.js",
