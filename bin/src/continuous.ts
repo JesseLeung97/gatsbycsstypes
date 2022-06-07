@@ -2,9 +2,8 @@
 //#region Import
 import path from "path";
 import fs from "fs";
-import readline, { ReadLine } from "readline";
 import config from "../gctconfig";
-import { lineBuilder, logger, writeToDefineFile } from "./util";
+import { logger, writeToDefineFile } from "./util";
 import { getCssFiles, buildDefinitionFiles } from "./main";
 //#endregion
 
@@ -13,6 +12,7 @@ let updateInterval: NodeJS.Timer;
 let record: Record<string, string> | null = null;
 
 function start() {
+    logger.startGeneratingFilesContinuous();
     if(!updateInterval) {
         setInterval(updateClosure(), config.UPDATE_INTERVAL);
     }
@@ -23,7 +23,7 @@ function updateClosure() {
         delete require.cache[require.resolve("../gctrecord")];
         record = require("../gctrecord").default;
         if(record === null || record === undefined) {
-            console.log(record);
+            logger.couldntGetDefineFile();
             return;
         }
         update(record);
@@ -31,18 +31,24 @@ function updateClosure() {
 }
 
 function update(generatedFiles: Record<string, string>) {
-    //const generatedFiles: Record<string, string> = require("../gctrecord").default;
-    function isChanged(path: string) {
-        if(Object.keys(generatedFiles).indexOf(path) < 0) {
+    function isChanged(filePath: string) {
+        if(Object.keys(generatedFiles).indexOf(filePath) < 0) {
             return true;
         }
-        const storedModifiedTime: string = generatedFiles[path];
-        const checkModifiedTime = fs.statSync(path).mtimeMs.toString();
+        const parentDir = path.resolve(path.dirname(filePath));
+        const newFilePath = path.resolve(parentDir, "styles.d.ts");
+        if(!fs.existsSync(path.resolve(newFilePath))) {
+            return true;
+        }
+        const storedModifiedTime: string = generatedFiles[filePath];
+        const checkModifiedTime = fs.statSync(filePath).mtimeMs.toString();
         if(storedModifiedTime !== checkModifiedTime) {
             return true;
         }
         return false;
     }
+
+    logger.checkingForChanges();
 
     let cssFiles: string[] = getCssFiles(config.APP_ROOT);
 
@@ -54,13 +60,13 @@ function update(generatedFiles: Record<string, string>) {
 
     writeToDefineFile(cssFiles);
 
-    logger.finishGeneratingFiles();
+    logger.finishGeneratingFilesContinuous(modifiedFiles.length);
 }
 
 //#endregion
 
 //#region Execution
-function main() {
+function continuousMain() {
     if(!config.IS_INITIALIZED) {
         logger.notInitialized();
         return;
@@ -69,5 +75,5 @@ function main() {
     start();
 }
 
-main();
+continuousMain();
 //#endregion

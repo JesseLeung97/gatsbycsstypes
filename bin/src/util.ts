@@ -36,13 +36,19 @@ const logger = {
         console.log(err);
     },
     startGeneratingFiles: function() {
-        console.log("Creating define files for CSS modules...");
+        console.log("Creating type definition files for CSS modules...");
+    },
+    startGeneratingFilesContinuous: function() {
+        console.log("Starting continuous generation of type definition files for CSS modules...");
     },
     notInitialized: function() {
         console.log("This program has not been initialize yet.  Please run 'gatsbycsstypes init' in the terminal before running the program.");
     },
     finishGeneratingFiles: function() {
         console.log(successMessage("CSS define files created."));
+    },
+    finishGeneratingFilesContinuous: function(fileCount: number) {
+        console.log(successMessage(`${fileCount} CSS define files updated.`));
     },
     startRemovingFiles: function() {
         console.log("Preparing to remove generated files...");
@@ -55,6 +61,12 @@ const logger = {
     },
     abortRemove: function() {
         console.log("Aborting removal! Files are intact!");
+    },
+    checkingForChanges: function() {
+        console.log("Polling for CSS file changes...");
+    },
+    couldntGetDefineFile: function() {
+        console.log(rejectInputMessage("There was an error fetching the generated files definition object."));
     }
 }
 
